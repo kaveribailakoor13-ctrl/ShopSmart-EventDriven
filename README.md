@@ -3,7 +3,7 @@
 > **Build Bengaluru 2.0 // Round 2 // Online Store**  
 > **Team:** Team Sinavi | **Team ID:** AFF7B51872EC  
 > **Members:** Sai Sinchana • H Nandini • Kaveri Shivappa Bailakoor
-
+> **Live Demo Link:** https://republicans-consider-neighborhood-rochester.trycloudflare.com
 ---
 
 ## 🚀 About the Project
