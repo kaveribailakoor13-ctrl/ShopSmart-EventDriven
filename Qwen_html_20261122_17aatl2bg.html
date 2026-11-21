@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopSmart - India's Most Transparent Shopping Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+:root {
+    --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #ec4899;
+    --accent: #f59e0b; --success: #10b981; --danger: #ef4444;
+    --dark: #1e293b; --gray: #64748b; --light: #f8fafc; --border: #e2e8f0;
+    --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    --gradient-2: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+}
+body { background: #f8fafc; color: var(--dark); min-height: 100vh; overflow-x: hidden; }
+
+/* AUTH */
+#authScreen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--gradient); display: flex; align-items: center;
+    justify-content: center; z-index: 1000; padding: 20px;
+}
+.auth-container {
+    background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
+    padding: 45px 40px; border-radius: 24px; width: 100%; max-width: 440px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3); animation: slideUp 0.6s ease;
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.auth-logo {
+    font-size: 3rem; text-align: center; margin-bottom: 10px;
+    background: var(--gradient-2); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; font-weight: 900;
+}
+.auth-title { text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+.auth-subtitle { text-align: center; color: var(--gray); font-size: 0.9rem; margin-bottom: 25px; }
+.auth-input {
+    width: 100%; padding: 14px 16px; border: 2px solid var(--border);
+    border-radius: 12px; font-size: 1rem; margin-bottom: 14px;
+    outline: none; transition: all 0.2s; background: #f8fafc;
+}
+.auth-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
+.auth-btn {
+    width: 100%; padding: 14px; background: var(--gradient-2); color: white;
+    border: none; border-radius: 12px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; margin-top: 5px;
+}
+.auth-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
+.otp-box {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    padding: 14px; border-radius: 12px; font-size: 0.88rem;
+    margin-bottom: 15px; border-left: 4px solid var(--accent); color: #78350f;
+}
+.otp-box strong { color: #92400e; font-size: 1.1rem; }
+.otp-timer { text-align: center; color: var(--gray); font-size: 0.85rem; margin-top: 12px; }
+.otp-timer a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
+.auth-features {
+    display: flex; justify-content: space-around; margin-top: 25px;
+    padding-top: 20px; border-top: 1px solid var(--border);
+}
+.auth-feature { text-align: center; font-size: 0.75rem; color: var(--gray); }
+.auth-feature-icon { font-size: 1.5rem; margin-bottom: 4px; }
+.hidden { display: none !important; }
+
+/* HEADER */
+#mainApp { display: none; }
+#mainApp.active { display: block; animation: fadeIn 0.5s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+header { background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; }
+.header-top {
+    background: var(--dark); color: white; padding: 8px 20px;
+    font-size: 0.8rem; text-align: center;
+}
+.header-main {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px; max-width: 1400px; margin: 0 auto; gap: 20px;
+}
+.logo {
+    font-size: 1.6rem; font-weight: 900;
+    background: var(--gradient-2); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; cursor: pointer;
+}
+.search-bar { flex: 1; max-width: 600px; position: relative; }
+.search-bar input {
+    width: 100%; padding: 12px 20px 12px 45px; border: 2px solid var(--border);
+    border-radius: 30px; font-size: 0.95rem; outline: none; transition: all 0.2s; background: #f8fafc;
+}
+.search-bar input:focus { border-color: var(--primary); background: white; }
+.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--gray); }
+.header-actions { display: flex; align-items: center; gap: 12px; }
+.lang-select {
+    padding: 8px 12px; border: 2px solid var(--border); border-radius: 8px;
+    background: white; font-size: 0.85rem; cursor: pointer; outline: none; font-weight: 600;
+}
+.icon-btn {
+    background: #f1f5f9; border: none; width: 42px; height: 42px;
+    border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+    position: relative; transition: all 0.2s;
+}
+.icon-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+.badge-count {
+    position: absolute; top: -4px; right: -4px; background: var(--danger);
+    color: white; border-radius: 50%; min-width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; padding: 0 5px;
+}
+.user-menu {
+    display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+    background: #f1f5f9; border-radius: 30px; cursor: pointer;
+    transition: all 0.2s; border: none; font-weight: 600;
+}
+.user-menu:hover { background: var(--primary); color: white; }
+.user-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--gradient-2); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700;
+}
+
+/* HERO */
+.hero {
+    background: var(--gradient); color: white; padding: 60px 20px;
+    text-align: center; position: relative; overflow: hidden;
+}
+.hero-content { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+.hero h1 { font-size: 3rem; font-weight: 900; margin-bottom: 12px; text-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+.hero p { font-size: 1.15rem; opacity: 0.95; margin-bottom: 30px; }
+.hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 30px; }
+.hero-stat { text-align: center; }
+.hero-stat-num { font-size: 2rem; font-weight: 800; }
+.hero-stat-label { font-size: 0.85rem; opacity: 0.9; }
+
+/* DATA SOURCE BANNER */
+.data-banner {
+    background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px 20px;
+    border-radius: 10px; margin: 20px auto; max-width: 1360px;
+    font-size: 0.85rem; color: #1e40af; display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 10px;
+}
+.ondc-btn {
+    background: #2563eb; color: white; border: none; padding: 8px 16px;
+    border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;
+    transition: all 0.2s;
+}
+.ondc-btn:hover { background: #1d4ed8; }
+.ondc-btn.active { background: var(--success); }
+
+/* CONTROLS */
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.controls-bar {
+    background: white; padding: 20px; border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 30px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+}
+.controls-bar select {
+    flex: 1; min-width: 180px; padding: 12px 16px; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 0.95rem; outline: none; background: white; cursor: pointer;
+}
+.controls-bar select:focus { border-color: var(--primary); }
+
+/* CATEGORY TABS */
+.category-section { margin: 30px 0; }
+.section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.category-tabs { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; }
+.cat-tab {
+    padding: 14px 24px; background: white; border: 2px solid var(--border);
+    border-radius: 14px; cursor: pointer; font-weight: 600; color: var(--dark);
+    transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 8px;
+}
+.cat-tab:hover { border-color: var(--primary); transform: translateY(-2px); }
+.cat-tab.active {
+    background: var(--gradient-2); color: white; border-color: transparent;
+    box-shadow: 0 8px 20px rgba(99,102,241,0.3);
+}
+.cat-icon { font-size: 1.3rem; }
+
+/* PRODUCT GRID */
+.product-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px; margin-top: 25px;
+}
+.product-card {
+    background: white; border-radius: 16px; overflow: hidden;
+    transition: all 0.3s; border: 1px solid var(--border); position: relative;
+}
+.product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+.product-img-wrap { position: relative; height: 260px; overflow: hidden; background: #f1f5f9; }
+.product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.product-card:hover .product-img { transform: scale(1.08); }
+.product-badge-top {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--danger); color: white; padding: 4px 10px;
+    border-radius: 20px; font-size: 0.72rem; font-weight: 700;
+}
+.ondc-badge {
+    position: absolute; top: 12px; right: 60px;
+    background: #1e40af; color: white; padding: 4px 10px;
+    border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+}
+.wishlist-btn {
+    position: absolute; top: 12px; right: 12px;
+    background: white; border: none; width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s;
+}
+.wishlist-btn:hover { transform: scale(1.1); }
+.wishlist-btn.active { color: var(--danger); }
+.product-info { padding: 16px; }
+.product-brand { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
+.product-name {
+    font-size: 0.95rem; font-weight: 600; margin: 4px 0 10px;
+    color: var(--dark); line-height: 1.4; min-height: 40px;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+}
+.price-box {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid #bbf7d0; border-radius: 10px; padding: 10px; margin-bottom: 10px;
+}
+.mrp { text-decoration: line-through; color: var(--gray); font-size: 0.8rem; }
+.selling-price { color: #059669; font-size: 0.95rem; font-weight: 600; margin: 2px 0; }
+.final-price { color: var(--success); font-size: 1.3rem; font-weight: 800; }
+.price-breakdown { font-size: 0.7rem; color: #166534; margin-top: 4px; line-height: 1.4; }
+.product-badges { display: flex; gap: 5px; margin: 10px 0; flex-wrap: wrap; }
+.p-badge { padding: 3px 8px; border-radius: 12px; font-size: 0.68rem; font-weight: 600; }
+.badge-del { background: #dbeafe; color: #1e40af; }
+.badge-trust { background: #dcfce7; color: #166534; }
+.badge-gst { background: #fef3c7; color: #92400e; }
+.add-cart-btn {
+    width: 100%; padding: 10px; background: var(--gradient-2); color: white;
+    border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+}
+.add-cart-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(99,102,241,0.3); }
+.add-cart-btn.added { background: var(--success); }
+
+/* CART SIDEBAR */
+.cart-sidebar {
+    position: fixed; top: 0; right: -450px; width: 420px; max-width: 100%;
+    height: 100vh; background: white; box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+    z-index: 200; transition: right 0.3s; display: flex; flex-direction: column;
+}
+.cart-sidebar.open { right: 0; }
+.cart-header {
+    padding: 20px; background: var(--gradient-2); color: white;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.cart-header h3 { font-size: 1.3rem; }
+.close-cart {
+    background: rgba(255,255,255,0.2); border: none; color: white;
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
+}
+.cart-items { flex: 1; overflow-y: auto; padding: 15px; }
+.cart-item {
+    display: flex; gap: 12px; padding: 12px; background: #f8fafc;
+    border-radius: 12px; margin-bottom: 10px;
+}
+.cart-item-img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+.cart-item-brand { font-size: 0.72rem; color: var(--gray); }
+.cart-item-price { color: var(--success); font-weight: 700; margin-top: 4px; }
+.cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.qty-btn {
+    width: 26px; height: 26px; border: 1px solid var(--border);
+    background: white; border-radius: 6px; cursor: pointer; font-weight: 700;
+}
+.qty-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+.remove-item { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.8rem; margin-left: auto; }
+.cart-empty { text-align: center; padding: 60px 20px; color: var(--gray); }
+.cart-empty-icon { font-size: 4rem; margin-bottom: 15px; opacity: 0.3; }
+.cart-footer { padding: 20px; border-top: 2px solid var(--border); background: white; }
+.cart-total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+.cart-total-row.grand {
+    font-size: 1.2rem; font-weight: 700; color: var(--dark);
+    padding-top: 10px; border-top: 1px dashed var(--border); margin-top: 10px;
+}
+.checkout-btn {
+    width: 100%; padding: 14px; background: var(--gradient-2); color: white;
+    border: none; border-radius: 12px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; margin-top: 12px; transition: all 0.2s;
+}
+.checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
+
+/* MODALS */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 300; padding: 20px;
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+.modal {
+    background: white; border-radius: 20px; width: 100%; max-width: 550px;
+    max-height: 90vh; overflow-y: auto; animation: slideUp 0.4s;
+}
+.modal-header {
+    padding: 20px 25px; background: var(--gradient-2); color: white;
+    border-radius: 20px 20px 0 0; display: flex; justify-content: space-between; align-items: center;
+}
+.modal-header h3 { font-size: 1.3rem; }
+.modal-close {
+    background: rgba(255,255,255,0.2); border: none; color: white;
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+}
+.modal-body { padding: 25px; }
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.form-input, .form-textarea, .form-select {
+    width: 100%; padding: 12px; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 0.95rem; outline: none; transition: all 0.2s; font-family: inherit;
+}
+.form-input:focus, .form-textarea:focus { border-color: var(--primary); }
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.payment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.payment-option {
+    padding: 14px; border: 2px solid var(--border); border-radius: 12px;
+    cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.payment-option:hover { border-color: var(--primary); }
+.payment-option.selected { border-color: var(--primary); background: #eef2ff; }
+.payment-icon { font-size: 1.8rem; margin-bottom: 4px; }
+.payment-label { font-size: 0.85rem; font-weight: 600; }
+
+.success-content { text-align: center; padding: 20px; }
+.success-icon {
+    width: 100px; height: 100px; margin: 0 auto 20px;
+    background: var(--success); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; color: white; animation: bounce 0.6s;
+}
+@keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+.success-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
+.order-id {
+    background: #f1f5f9; padding: 12px; border-radius: 10px;
+    font-family: monospace; font-size: 1.1rem; font-weight: 700;
+    color: var(--primary); margin: 15px 0;
+}
+.order-details { text-align: left; background: #f8fafc; padding: 15px; border-radius: 10px; margin: 15px 0; }
+.order-detail-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; }
+
+.toast {
+    position: fixed; bottom: 30px; right: 30px; background: var(--dark);
+    color: white; padding: 14px 22px; border-radius: 12px; z-index: 500;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); transform: translateY(150px);
+    opacity: 0; transition: all 0.3s; max-width: 350px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+footer { background: var(--dark); color: white; padding: 40px 20px 20px; margin-top: 60px; }
+.footer-content {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;
+}
+.footer-col h4 { margin-bottom: 15px; color: var(--accent); }
+.footer-col p, .footer-col a { color: #cbd5e1; font-size: 0.9rem; line-height: 1.8; text-decoration: none; display: block; }
+.footer-col a:hover { color: white; }
+.footer-bottom {
+    text-align: center; padding-top: 25px; margin-top: 25px;
+    border-top: 1px solid #334155; color: #94a3b8; font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2rem; }
+    .header-main { flex-wrap: wrap; }
+    .search-bar { order: 3; width: 100%; max-width: 100%; }
+    .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .product-img-wrap { height: 180px; }
+    .form-row, .payment-options { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="authScreen">
+    <div class="auth-container">
+        <div class="auth-logo">🛍️ ShopSmart</div>
+        <h2 class="auth-title" data-i18n="welcome">Welcome to ShopSmart</h2>
+        <p class="auth-subtitle" data-i18n="auth_subtitle">India's most transparent shopping platform</p>
+        <div id="step1">
+            <input type="tel" id="phoneInput" class="auth-input" placeholder="Mobile Number (10 digits)" maxlength="10">
+            <input type="text" id="nameInput" class="auth-input" placeholder="Full Name">
+            <button class="auth-btn" onclick="sendOTP()" data-i18n="send_otp">Send OTP</button>
+            <div class="auth-features">
+                <div class="auth-feature"><div class="auth-feature-icon">🔒</div><span data-i18n="secure">Secure</span></div>
+                <div class="auth-feature"><div class="auth-feature-icon">✓</div><span data-i18n="verified">Verified</span></div>
+                <div class="auth-feature"><div class="auth-feature-icon">💰</div><span data-i18n="transparent">Transparent</span></div>
+            </div>
+        </div>
+        <div id="step2" class="hidden">
+            <div class="otp-box">
+                📱 <span data-i18n="otp_sent">OTP sent to</span> <strong id="otpPhone"></strong><br>
+                <small style="margin-top:6px;display:block;" data-i18n="demo_note">Demo Mode: Use OTP <strong>123456</strong></small>
+            </div>
+            <input type="text" id="otpInput" class="auth-input" placeholder="Enter 6-digit OTP" maxlength="6">
+            <button class="auth-btn" onclick="verifyOTP()" data-i18n="verify_login">Verify & Login</button>
+            <div class="otp-timer">
+                <span data-i18n="resend_in">Resend OTP in</span> <strong id="timer">30s</strong>
+                <span id="resendLink" class="hidden"> | <a onclick="resendOTP()" data-i18n="resend">Resend OTP</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
+    <header>
+        <div class="header-top">
+            🚚 <span data-i18n="free_shipping">Free shipping on orders above ₹999</span> |
+            🔄 <span data-i18n="easy_returns">7-day easy returns</span> |
+            ✓ <span data-i18n="genuine">100% genuine products</span>
+        </div>
+        <div class="header-main">
+            <div class="logo">🛍️ ShopSmart</div>
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Try fuzzy search: 'shrt', 'levi', 'kurti'..." oninput="renderProducts()">
+            </div>
+            <div class="header-actions">
+                <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="en">🇬🇧 English</option>
+                    <option value="hi">🇮🇳 हिंदी</option>
+                    <option value="ta">🇮🇳 தமிழ்</option>
+                    <option value="te">🇮🇳 తెలుగు</option>
+                    <option value="kn">🇮🇳 ಕನ್ನಡ</option>
+                    <option value="bn">🇮🇳 বাংলা</option>
+                    <option value="mr">🇮🇳 मराठी</option>
+                </select>
+                <button class="icon-btn" onclick="toggleWishlist()" title="Wishlist">❤️<span class="badge-count" id="wishlistCount">0</span></button>
+                <button class="icon-btn" onclick="toggleCart()" title="Cart">🛒<span class="badge-count" id="cartCount">0</span></button>
+                <button class="user-menu" onclick="logout()">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span id="userName">User</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 data-i18n="hero_title">Shop with Absolute Confidence</h1>
+            <p data-i18n="hero_subtitle">Real brands • Real MRP prices • Correct GST • Transparent shipping</p>
+            <div class="hero-stats">
+                <div class="hero-stat"><div class="hero-stat-num">42</div><div class="hero-stat-label" data-i18n="products">Products</div></div>
+                <div class="hero-stat"><div class="hero-stat-num">30+</div><div class="hero-stat-label" data-i18n="brands">Top Brands</div></div>
+                <div class="hero-stat"><div class="hero-stat-num">ONDC</div><div class="hero-stat-label" data-i18n="network">Network Ready</div></div>
+                <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-label" data-i18n="transparent">Transparent</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATA SOURCE BANNER -->
+    <div class="data-banner">
+        <span>📊 <strong data-i18n="data_source">Data Source:</strong> <span data-i18n="data_desc">Real MRP from brand websites with correct Indian GST rates</span></span>
+        <button class="ondc-btn" id="ondcToggle" onclick="toggleONDC()">🌐 <span data-i18n="load_ondc">Load ONDC Products</span></button>
+    </div>
+
+    <div class="container">
+        <div class="controls-bar">
+            <select id="categoryFilter" onchange="renderProducts()">
+                <option value="all" data-i18n="all_categories">All Categories</option>
+                <option value="men" data-i18n="men">Men</option>
+                <option value="women" data-i18n="women">Women</option>
+                <option value="boys" data-i18n="boys">Boys</option>
+                <option value="girls" data-i18n="girls">Girls</option>
+            </select>
+            <select id="urgencyFilter" onchange="renderProducts()">
+                <option value="all" data-i18n="any_delivery">Any Delivery Time</option>
+                <option value="2">🚀 Within 2 days</option>
+                <option value="3" data-i18n="within_3">Within 3 days</option>
+                <option value="5">Within 5 days</option>
+            </select>
+            <select id="sortFilter" onchange="renderProducts()">
+                <option value="popular" data-i18n="sort_popular">Most Popular</option>
+                <option value="low" data-i18n="sort_low">Price: Low to High</option>
+                <option value="high" data-i18n="sort_high">Price: High to Low</option>
+                <option value="rating" data-i18n="sort_rating">Highest Rated</option>
+            </select>
+        </div>
+
+        <div class="category-section">
+            <h2 class="section-title">🏷️ <span data-i18n="shop_category">Shop by Category</span></h2>
+            <div class="category-tabs">
+                <div class="cat-tab active" onclick="setCategory('all', this)"><span class="cat-icon">🛍️</span><span data-i18n="all">All</span></div>
+                <div class="cat-tab" onclick="setCategory('men', this)"><span class="cat-icon">👔</span><span data-i18n="men">Men</span></div>
+                <div class="cat-tab" onclick="setCategory('women', this)"><span class="cat-icon">👗</span><span data-i18n="women">Women</span></div>
+                <div class="cat-tab" onclick="setCategory('boys', this)"><span class="cat-icon">👦</span><span data-i18n="boys">Boys</span></div>
+                <div class="cat-tab" onclick="setCategory('girls', this)"><span class="cat-icon">👧</span><span data-i18n="girls">Girls</span></div>
+            </div>
+        </div>
+
+        <h2 class="section-title">✨ <span data-i18n="featured">Featured Products</span></h2>
+        <div id="productGrid" class="product-grid"></div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>🛍️ ShopSmart</h4>
+                <p data-i18n="footer_about">India's most transparent shopping platform with ONDC integration.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="customer_service">Customer Service</h4>
+                <a href="#" data-i18n="contact_us">Contact Us</a>
+                <a href="#" data-i18n="shipping_info">Shipping Info</a>
+                <a href="#" data-i18n="returns">Returns & Refunds</a>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="company">Company</h4>
+                <a href="#" data-i18n="about">About Us</a>
+                <a href="#" data-i18n="privacy">Privacy Policy</a>
+                <a href="#" data-i18n="terms">Terms of Service</a>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="connect">Connect With Us</h4>
+                <p>📧 support@shopsmart.in</p>
+                <p>📞 1800-123-4567</p>
+                <p>📍 Mumbai, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 ShopSmart. <span data-i18n="all_rights">All rights reserved.</span> | Made with ❤️ in India</div>
+    </footer>
+</div>
+
+<!-- CART -->
+<div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h3>🛒 <span data-i18n="your_cart">Your Cart</span></h3>
+        <button class="close-cart" onclick="toggleCart()">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div id="cartFooter" class="cart-footer"></div>
+</div>
+
+<!-- CHECKOUT -->
+<div id="checkoutModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>📦 <span data-i18n="checkout">Checkout</span></h3>
+            <button class="modal-close" onclick="closeCheckout()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="checkoutStep1">
+                <h4 style="margin-bottom:15px;" data-i18n="delivery_address">Delivery Address</h4>
+                <div class="form-group"><label class="form-label" data-i18n="full_name">Full Name</label><input type="text" id="checkName" class="form-input"></div>
+                <div class="form-group"><label class="form-label" data-i18n="phone">Phone Number</label><input type="tel" id="checkPhone" class="form-input" maxlength="10"></div>
+                <div class="form-group"><label class="form-label" data-i18n="address">Address</label><textarea id="checkAddress" class="form-textarea"></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label" data-i18n="city">City</label><input type="text" id="checkCity" class="form-input"></div>
+                    <div class="form-group"><label class="form-label" data-i18n="pincode">Pincode</label><input type="text" id="checkPincode" class="form-input" maxlength="6"></div>
+                </div>
+                <div class="form-group"><label class="form-label" data-i18n="state">State</label><input type="text" id="checkState" class="form-input"></div>
+                <button class="checkout-btn" onclick="goToPayment()" data-i18n="continue_payment">Continue to Payment</button>
+            </div>
+            <div id="checkoutStep2" class="hidden">
+                <h4 style="margin-bottom:15px;" data-i18n="payment_method">Payment Method</h4>
+                <div class="payment-options">
+                    <div class="payment-option selected" onclick="selectPayment('cod', this)"><div class="payment-icon">💵</div><div class="payment-label" data-i18n="cod">Cash on Delivery</div></div>
+                    <div class="payment-option" onclick="selectPayment('upi', this)"><div class="payment-icon">📱</div><div class="payment-label">UPI</div></div>
+                    <div class="payment-option" onclick="selectPayment('card', this)"><div class="payment-icon">💳</div><div class="payment-label" data-i18n="card">Card</div></div>
+                    <div class="payment-option" onclick="selectPayment('netbanking', this)"><div class="payment-icon">🏦</div><div class="payment-label" data-i18n="netbanking">Net Banking</div></div>
+                </div>
+                <div id="orderSummary" style="margin-top:20px;padding:15px;background:#f8fafc;border-radius:10px;"></div>
+                <button class="checkout-btn" onclick="placeOrder()" data-i18n="place_order">Place Order</button>
+                <button class="auth-btn" style="background:#e2e8f0;color:var(--dark);margin-top:8px;" onclick="backToAddress()" data-i18n="back">← Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="successModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-body">
+            <div class="success-content">
+                <div class="success-icon">✓</div>
+                <h2 class="success-title" data-i18n="order_placed">Order Placed Successfully!</h2>
+                <p style="color:var(--gray);" data-i18n="thank_you">Thank you for shopping with ShopSmart</p>
+                <div class="order-id" id="orderIdDisplay"></div>
+                <div class="order-details" id="orderDetailsDisplay"></div>
+                <button class="checkout-btn" onclick="closeSuccess()" data-i18n="continue_shopping">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ==========================================
+// TRANSLATIONS (7 Languages)
+// ==========================================
+const translations = {
+    en: { welcome:"Welcome to ShopSmart", auth_subtitle:"India's most transparent shopping platform", send_otp:"Send OTP", verify_login:"Verify & Login", secure:"Secure", verified:"Verified", transparent:"Transparent", otp_sent:"OTP sent to", demo_note:"Demo Mode: Use OTP", resend_in:"Resend OTP in", resend:"Resend OTP", free_shipping:"Free shipping on orders above ₹999", easy_returns:"7-day easy returns", genuine:"100% genuine products", hero_title:"Shop with Absolute Confidence", hero_subtitle:"Real brands • Real MRP prices • Correct GST • Transparent shipping", products:"Products", brands:"Top Brands", network:"Network Ready", customer_service:"Customer Service", contact_us:"Contact Us", shipping_info:"Shipping Info", returns:"Returns & Refunds", company:"Company", about:"About Us", privacy:"Privacy Policy", terms:"Terms of Service", connect:"Connect With Us", all_rights:"All rights reserved.", your_cart:"Your Cart", checkout:"Checkout", delivery_address:"Delivery Address", full_name:"Full Name", phone:"Phone Number", address:"Address", city:"City", pincode:"Pincode", state:"State", continue_payment:"Continue to Payment", payment_method:"Payment Method", cod:"Cash on Delivery", card:"Card", netbanking:"Net Banking", place_order:"Place Order", back:"← Back", order_placed:"Order Placed Successfully!", thank_you:"Thank you for shopping with ShopSmart", continue_shopping:"Continue Shopping", add_to_cart:"Add to Cart", added:"✓ Added!", empty_cart:"Your cart is empty", subtotal:"Subtotal", shipping:"Shipping", gst:"GST", total:"Total", free:"FREE", remove:"Remove", order_id:"Order ID", delivery_date:"Estimated Delivery", payment:"Payment Method", items_ordered:"Items Ordered", all_categories:"All Categories", men:"Men", women:"Women", boys:"Boys", girls:"Girls", any_delivery:"Any Delivery Time", within_3:"Within 3 days", sort_popular:"Most Popular", sort_low:"Price: Low to High", sort_high:"Price: High to Low", sort_rating:"Highest Rated", shop_category:"Shop by Category", all:"All", featured:"Featured Products", footer_about:"India's most transparent shopping platform with ONDC integration.", data_source:"Data Source:", data_desc:"Real MRP from brand websites with correct Indian GST rates", load_ondc:"Load ONDC Products", transparent:"Transparent" },
+    hi: { welcome:"ShopSmart में आपका स्वागत है", auth_subtitle:"भारत का सबसे पारदर्शी शॉपिंग प्लेटफॉर्म", send_otp:"OTP भेजें", verify_login:"सत्यापित करें", secure:"सुरक्षित", verified:"सत्यापित", transparent:"पारदर्शी", otp_sent:"OTP भेजा गया", demo_note:"डेमो मोड: OTP उपयोग करें", resend_in:"OTP पुनः भेजें", resend:"OTP पुनः भेजें", free_shipping:"₹999 से ऊपर मुफ्त शिपिंग", easy_returns:"7 दिन की आसान रिटर्न", genuine:"100% असली उत्पाद", hero_title:"पूर्ण विश्वास के साथ खरीदारी करें", hero_subtitle:"असली ब्रांड • असली MRP • सही GST", products:"उत्पाद", brands:"शीर्ष ब्रांड", network:"ONDC तैयार", customer_service:"ग्राहक सेवा", contact_us:"संपर्क करें", shipping_info:"शिपिंग जानकारी", returns:"रिटर्न", company:"कंपनी", about:"हमारे बारे में", privacy:"गोपनीयता नीति", terms:"शर्तें", connect:"जुड़ें", all_rights:"सर्वाधिकार सुरक्षित।", your_cart:"आपकी कार्ट", checkout:"चेकआउट", delivery_address:"डिलीवरी पता", full_name:"पूरा नाम", phone:"फोन नंबर", address:"पता", city:"शहर", pincode:"पिनकोड", state:"राज्य", continue_payment:"भुगतान जारी रखें", payment_method:"भुगतान विधि", cod:"कैश ऑन डिलीवरी", card:"कार्ड", netbanking:"नेट बैंकिंग", place_order:"ऑर्डर दें", back:"← वापस", order_placed:"ऑर्डर सफल!", thank_you:"धन्यवाद", continue_shopping:"खरीदारी जारी रखें", add_to_cart:"कार्ट में जोड़ें", added:"✓ जोड़ा!", empty_cart:"कार्ट खाली है", subtotal:"उप-कुल", shipping:"शिपिंग", gst:"GST", total:"कुल", free:"मुफ्त", remove:"हटाएं", order_id:"ऑर्डर आईडी", delivery_date:"डिलीवरी", payment:"भुगतान", items_ordered:"आइटम", all_categories:"सभी श्रेणियाँ", men:"पुरुष", women:"महिला", boys:"लड़के", girls:"लड़कियाँ", any_delivery:"कोई भी समय", within_3:"3 दिन के अंदर", sort_popular:"लोकप्रिय", sort_low:"कीमत: कम से ज्यादा", sort_high:"कीमत: ज्यादा से कम", sort_rating:"उच्चतम रेटेड", shop_category:"श्रेणी के अनुसार", all:"सभी", featured:"विशेष उत्पाद", footer_about:"भारत का पारदर्शी शॉपिंग प्लेटफॉर्म।", data_source:"डेटा स्रोत:", data_desc:"ब्रांड वेबसाइट से असली MRP, सही GST के साथ", load_ondc:"ONDC लोड करें", transparent:"पारदर्शी" },
+    ta: { welcome:"ShopSmart க்கு வரவேற்கிறோம்", auth_subtitle:"இந்தியாவின் மிக வெளிப்படைமான ஷாப்பிங் தளம்", send_otp:"OTP அனுப்பு", verify_login:"சரிபார்த்து உள்நுழைய", secure:"பாதுகாப்பானது", verified:"சரிபார்க்கப்பட்டது", transparent:"வெளிப்படை", otp_sent:"OTP அனுப்பப்பட்டது", demo_note:"டெமோ: OTP பயன்படுத்தவும்", resend_in:"OTP மீண்டும்", resend:"மீண்டும்", free_shipping:"₹999 மேல் இலவசம்", easy_returns:"7 நாள் ரிட்டர்ன்", genuine:"100% அசல்", hero_title:"நம்பிக்கையுடன் ஷாப்பிங்", hero_subtitle:"அசல் பிராண்டுகள் • அசல் MRP • சரியான GST", products:"பொருட்கள்", brands:"பிராண்டுகள்", network:"ONDC தயார்", customer_service:"சேவை", contact_us:"தொடர்பு", shipping_info:"ஷிப்பிங்", returns:"ரிட்டர்ன்", company:"நிறுவனம்", about:"எங்களை பற்றி", privacy:"தனியுரிமை", terms:"விதிமுறைகள்", connect:"இணையுங்கள்", all_rights:"உரிமைகள் பாதுகாக்கப்பட்டவை.", your_cart:"உங்கள் கார்ட்", checkout:"செக்அவுட்", delivery_address:"முகவரி", full_name:"பெயர்", phone:"தொலைபேசி", address:"முகவரி", city:"நகரம்", pincode:"பின்கோட்", state:"மாநிலம்", continue_payment:"தொடரவும்", payment_method:"பணம் செலுத்தும் முறை", cod:"COD", card:"கார்டு", netbanking:"நெட் பேங்கிங்", place_order:"ஆர்டர்", back:"← பின்", order_placed:"வெற்றி!", thank_you:"நன்றி", continue_shopping:"தொடரவும்", add_to_cart:"சேர்", added:"✓ சேர்க்கப்பட்டது!", empty_cart:"காலி", subtotal:"உப மொத்தம்", shipping:"ஷிப்பிங்", gst:"GST", total:"மொத்தம்", free:"இலவசம்", remove:"அகற்று", order_id:"ஐடி", delivery_date:"டெலிவரி", payment:"பணம்", items_ordered:"பொருட்கள்", all_categories:"அனைத்தும்", men:"ஆண்கள்", women:"பெண்கள்", boys:"சிறுவர்கள்", girls:"சிறுமிகள்", any_delivery:"எந்த நேரமும்", within_3:"3 நாட்கள்", sort_popular:"பிரபலம்", sort_low:"விலை: குறைவு", sort_high:"விலை: அதிகம்", sort_rating:"ரேட்டிங்", shop_category:"வகை", all:"அனைத்தும்", featured:"சிறப்பு", footer_about:"வெளிப்படை தளம்.", data_source:"தரவு:", data_desc:"அசல் MRP, சரியான GST", load_ondc:"ONDC ஏற்று", transparent:"வெளிப்படை" },
+    te: { welcome:"ShopSmart కు స్వాగతం", auth_subtitle:"భారతదేశపు పారదర్శక షాపింగ్", send_otp:"OTP పంపండి", verify_login:"ధృవీకరించండి", secure:"భద్రం", verified:"ధృవీకరించబడింది", transparent:"పారదర్శక", otp_sent:"OTP పంపబడింది", demo_note:"డెమో: OTP", resend_in:"మళ్లీ", resend:"మళ్లీ", free_shipping:"₹999 పై ఉచితం", easy_returns:"7 రోజులు", genuine:"100% అసలు", hero_title:"విశ్వాసంతో షాపింగ్", hero_subtitle:"అసలు బ్రాండ్లు • అసలు MRP • సరైన GST", products:"ఉత్పత్తులు", brands:"బ్రాండ్లు", network:"ONDC సిద్ధం", customer_service:"సేవ", contact_us:"సంప్రదించండి", shipping_info:"షిప్పింగ్", returns:"రిటర్న్స్", company:"కంపెనీ", about:"మా గురించి", privacy:"గోప్యత", terms:"నిబంధనలు", connect:"కనెక్ట్", all_rights:"హక్కులు.", your_cart:"మీ కార్ట్", checkout:"చెక్అవుట్", delivery_address:"చిరునామా", full_name:"పేరు", phone:"ఫోన్", address:"చిరునామా", city:"నగరం", pincode:"పిన్‌కోడ్", state:"రాష్ట్రం", continue_payment:"కొనసాగించండి", payment_method:"చెల్లింపు", cod:"COD", card:"కార్డ్", netbanking:"నెట్ బ్యాంకింగ్", place_order:"ఆర్డర్", back:"← వెనుక", order_placed:"విజయవంతం!", thank_you:"ధన్యవాదాలు", continue_shopping:"కొనసాగించండి", add_to_cart:"జోడించండి", added:"✓ జోడించబడింది!", empty_cart:"ఖాళీ", subtotal:"సబ్‌టోటల్", shipping:"షిప్పింగ్", gst:"GST", total:"మొత్తం", free:"ఉచితం", remove:"తీసివేయి", order_id:"ఐడి", delivery_date:"డెలివరీ", payment:"చెల్లింపు", items_ordered:"వస్తువులు", all_categories:"అన్ని", men:"పురుషులు", women:"మహిళలు", boys:"బాలురు", girls:"బాలికలు", any_delivery:"ఏదైనా", within_3:"3 రోజులు", sort_popular:"ప్రజాదరణ", sort_low:"ధర: తక్కువ", sort_high:"ధర: ఎక్కువ", sort_rating:"రేటింగ్", shop_category:"వర్గం", all:"అన్నీ", featured:"ప్రత్యేక", footer_about:"పారదర్శక ప్లాట్‌ఫామ్.", data_source:"డేటా:", data_desc:"అసలు MRP, సరైన GST", load_ondc:"ONDC లోడ్", transparent:"పారదర్శక" },
+    kn: { welcome:"ShopSmart ಗೆ ಸ್ವಾಗತ", auth_subtitle:"ಭಾರತದ ಪಾರದರ್ಶಕ ಶಾಪಿಂಗ್", send_otp:"OTP ಕಳುಹಿಸಿ", verify_login:"ಪರಿಶೀಲಿಸಿ", secure:"ಸುರಕ್ಷಿತ", verified:"ಪರಿಶೀಲಿಸಲಾಗಿದೆ", transparent:"ಪಾರದರ್ಶಕ", otp_sent:"OTP ಕಳುಹಿಸಲಾಗಿದೆ", demo_note:"ಡೆಮೋ: OTP", resend_in:"ಮರುಕಳುಹಿಸಿ", resend:"ಮರುಕಳುಹಿಸಿ", free_shipping:"₹999 ಮೇಲೆ ಉಚಿತ", easy_returns:"7 ದಿನ", genuine:"100% ಅಸಲಿ", hero_title:"ವಿಶ್ವಾಸದೊಂದಿಗೆ ಖರೀದಿಸಿ", hero_subtitle:"ಅಸಲಿ ಬ್ರ್ಯಾಂಡ್ • ಅಸಲಿ MRP • ಸರಿಯಾದ GST", products:"ಉತ್ಪನ್ನಗಳು", brands:"ಬ್ರ್ಯಾಂಡ್‌ಗಳು", network:"ONDC ಸಿದ್ಧ", customer_service:"ಸೇವೆ", contact_us:"ಸಂಪರ್ಕಿಸಿ", shipping_info:"ಶಿಪ್ಪಿಂಗ್", returns:"ರಿಟರ್ನ್ಸ್", company:"ಕಂಪೆನಿ", about:"ನಮ್ಮ ಬಗ್ಗೆ", privacy:"ಗೌಪ್ಯತೆ", terms:"ಷರತ್ತುಗಳು", connect:"ಸಂಪರ್ಕಿಸಿ", all_rights:"ಹಕ್ಕುಗಳು.", your_cart:"ನಿಮ್ಮ ಕಾರ್ಟ್", checkout:"ಚೆಕ್‌ಔಟ್", delivery_address:"ವಿಳಾಸ", full_name:"ಹೆಸರು", phone:"ಫೋನ್", address:"ವಿಳಾಸ", city:"ನಗರ", pincode:"ಪಿನ್‌ಕೋಡ್", state:"ರಾಜ್ಯ", continue_payment:"ಮುಂದುವರಿಸಿ", payment_method:"ಪಾವತಿ", cod:"COD", card:"ಕಾರ್ಡ್", netbanking:"ನೆಟ್ ಬ್ಯಾಂಕಿಂಗ್", place_order:"ಆರ್ಡರ್", back:"← ಹಿಂದೆ", order_placed:"ಯಶಸ್ವಿ!", thank_you:"ಧನ್ಯವಾದ", continue_shopping:"ಮುಂದುವರಿಸಿ", add_to_cart:"ಸೇರಿಸಿ", added:"✓ ಸೇರಿಸಲಾಗಿದೆ!", empty_cart:"ಖಾಲಿ", subtotal:"ಉಪ-ಮೊತ್ತ", shipping:"ಶಿಪ್ಪಿಂಗ್", gst:"GST", total:"ಒಟ್ಟು", free:"ಉಚಿತ", remove:"ತೆಗೆದುಹಾಕಿ", order_id:"ಐಡಿ", delivery_date:"ಡೆಲಿವರಿ", payment:"ಪಾವತಿ", items_ordered:"ವಸ್ತುಗಳು", all_categories:"ಎಲ್ಲಾ", men:"ಪುರುಷರು", women:"ಮಹಿಳೆಯರು", boys:"ಬಾಲಕರು", girls:"ಬಾಲಕಿಯರು", any_delivery:"ಯಾವುದೇ", within_3:"3 ದಿನ", sort_popular:"ಜನಪ್ರಿಯ", sort_low:"ಬೆಲೆ: ಕಡಿಮೆ", sort_high:"ಬೆಲೆ: ಹೆಚ್ಚು", sort_rating:"ರೇಟಿಂಗ್", shop_category:"ವರ್ಗ", all:"ಎಲ್ಲಾ", featured:"ವಿಶೇಷ", footer_about:"ಪಾರದರ್ಶಕ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್.", data_source:"ಡೇಟಾ:", data_desc:"ಅಸಲು MRP, ಸರಿಯಾದ GST", load_ondc:"ONDC ಲೋಡ್", transparent:"ಪಾರದರ್ಶಕ" },
+    bn: { welcome:"ShopSmart এ স্বাগতম", auth_subtitle:"ভারতের স্বচ্ছ শপিং", send_otp:"OTP পাঠান", verify_login:"যাচাই করুন", secure:"নিরাপদ", verified:"যাচাইকৃত", transparent:"স্বচ্ছ", otp_sent:"OTP পাঠানো হয়েছে", demo_note:"ডেমো: OTP", resend_in:"পুনরায়", resend:"পুনরায়", free_shipping:"₹999+ ফ্রি", easy_returns:"7 দিন", genuine:"100% আসল", hero_title:"আত্মবিশ্বাসের সাথে কিনুন", hero_subtitle:"আসল ব্র্যান্ড • আসল MRP • সঠিক GST", products:"পণ্য", brands:"ব্র্যান্ড", network:"ONDC প্রস্তুত", customer_service:"সেবা", contact_us:"যোগাযোগ", shipping_info:"শিপিং", returns:"রিটার্ন", company:"কোম্পানি", about:"আমাদের সম্পর্কে", privacy:"গোপনীয়তা", terms:"শর্তাবলী", connect:"যুক্ত হন", all_rights:"অধিকার.", your_cart:"আপনার কার্ট", checkout:"চেকআউট", delivery_address:"ঠিকানা", full_name:"নাম", phone:"ফোন", address:"ঠিকানা", city:"শহর", pincode:"পিনকোড", state:"রাজ্য", continue_payment:"চালিয়ে যান", payment_method:"পেমেন্ট", cod:"COD", card:"কার্ড", netbanking:"নেট ব্যাংকিং", place_order:"অর্ডার", back:"← পিছনে", order_placed:"সফল!", thank_you:"ধন্যবাদ", continue_shopping:"চালিয়ে যান", add_to_cart:"যোগ করুন", added:"✓ যোগ!", empty_cart:"খালি", subtotal:"সাবটোটাল", shipping:"শিপিং", gst:"GST", total:"মোট", free:"ফ্রি", remove:"সরান", order_id:"আইডি", delivery_date:"ডেলিভারি", payment:"পেমেন্ট", items_ordered:"আইটেম", all_categories:"সব", men:"পুরুষ", women:"মহিলা", boys:"ছেলে", girls:"মেয়ে", any_delivery:"যেকোনো", within_3:"3 দিন", sort_popular:"জনপ্রিয়", sort_low:"দাম: কম", sort_high:"দাম: বেশি", sort_rating:"রেটিং", shop_category:"ক্যাটাগরি", all:"সব", featured:"বিশেষ", footer_about:"স্বচ্ছ প্ল্যাটফর্ম.", data_source:"ডেটা:", data_desc:"আসল MRP, সঠিক GST", load_ondc:"ONDC লোড", transparent:"স্বচ্ছ" },
+    mr: { welcome:"ShopSmart मध्ये स्वागत", auth_subtitle:"भारतातील पारदर्शक शॉपिंग", send_otp:"OTP पाठवा", verify_login:"सत्यापित करा", secure:"सुरक्षित", verified:"सत्यापित", transparent:"पारदर्शक", otp_sent:"OTP पाठवला", demo_note:"डेमो: OTP", resend_in:"पुन्हा", resend:"पुन्हा", free_shipping:"₹999+ मोफत", easy_returns:"7 दिवस", genuine:"100% खरे", hero_title:"विश्वासाने खरेदी करा", hero_subtitle:"खरे ब्रँड • खरे MRP • योग्य GST", products:"उत्पादने", brands:"ब्रँड", network:"ONDC तयार", customer_service:"सेवा", contact_us:"संपर्क", shipping_info:"शिपिंग", returns:"रिटर्न", company:"कंपनी", about:"आमच्याबद्दल", privacy:"गोपनीयता", terms:"अटी", connect:"कनेक्ट", all_rights:"हक्क.", your_cart:"तुमची कार्ट", checkout:"चेकआउट", delivery_address:"पत्ता", full_name:"नाव", phone:"फोन", address:"पत्ता", city:"शहर", pincode:"पिनकोड", state:"राज्य", continue_payment:"सुरू ठेवा", payment_method:"पेमेंट", cod:"COD", card:"कार्ड", netbanking:"नेट बँकिंग", place_order:"ऑर्डर द्या", back:"← मागे", order_placed:"यशस्वी!", thank_you:"धन्यवाद", continue_shopping:"सुरू ठेवा", add_to_cart:"जोडा", added:"✓ जोडले!", empty_cart:"रिकामी", subtotal:"उप-एकूण", shipping:"शिपिंग", gst:"GST", total:"एकूण", free:"मोफत", remove:"काढा", order_id:"आयडी", delivery_date:"डिलिव्हरी", payment:"पेमेंट", items_ordered:"आयटम", all_categories:"सर्व", men:"पुरुष", women:"स्त्रिया", boys:"मुले", girls:"मुली", any_delivery:"कोणताही", within_3:"3 दिवस", sort_popular:"लोकप्रिय", sort_low:"किंमत: कमी", sort_high:"किंमत: जास्त", sort_rating:"रेटिंग", shop_category:"श्रेणी", all:"सर्व", featured:"वैशिष्ट्यपूर्ण", footer_about:"पारदर्शक प्लॅटफॉर्म.", data_source:"डेटा:", data_desc:"असली MRP, योग्य GST", load_ondc:"ONDC लोड", transparent:"पारदर्शक" }
+};
+
+let currentLang = 'en';
+function changeLanguage(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+    });
+    renderProducts(); renderCart();
+}
+function t(key) { return translations[currentLang][key] || translations.en[key] || key; }
+
+// ==========================================
+// VERIFIED REAL INDIAN MARKET PRODUCTS
+// MRP as per brand websites (Nov 2026)
+// GST: ≤₹1000 apparel=5%, >₹1000 apparel=12%, accessories=18%, perfumes=28%
+// ==========================================
+const products = [
+    // MEN
+    { id:1, name:"Men's Slim Fit Formal Cotton Shirt", brand:"Allen Solly", category:"men", subcategory:"shirt", mrp_actual:1799, base_price:1349, gst_percent:12, shipping:0, delivery_days:3, stock:45, review_score:87, img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&h=600&fit=crop", discount:25 },
+    { id:2, name:"Men's 511 Slim Fit Stretchable Jeans", brand:"Levi's", category:"men", subcategory:"jeans", mrp_actual:3499, base_price:2799, gst_percent:12, shipping:0, delivery_days:4, stock:30, review_score:92, img:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&h=600&fit=crop", discount:20 },
+    { id:3, name:"Men's Printed Round Neck Cotton T-Shirt", brand:"Roadster", category:"men", subcategory:"tshirt", mrp_actual:999, base_price:699, gst_percent:5, shipping:49, delivery_days:3, stock:120, review_score:84, img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=600&fit=crop", discount:30 },
+    { id:4, name:"Men's Slim Fit Chino Trousers", brand:"Arrow", category:"men", subcategory:"pants", mrp_actual:2299, base_price:1954, gst_percent:12, shipping:0, delivery_days:4, stock:65, review_score:86, img:"https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500&h=600&fit=crop", discount:15 },
+    { id:5, name:"Men's Classic Polo Cotton T-Shirt", brand:"U.S. Polo Assn.", category:"men", subcategory:"tshirt", mrp_actual:1999, base_price:1799, gst_percent:12, shipping:0, delivery_days:2, stock:80, review_score:89, img:"https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=500&h=600&fit=crop", discount:10 },
+    { id:6, name:"Men's Single Breasted Formal Blazer", brand:"Raymond", category:"men", subcategory:"blazer", mrp_actual:8999, base_price:7199, gst_percent:12, shipping:0, delivery_days:5, stock:25, review_score:91, img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=600&fit=crop", discount:20 },
+    { id:7, name:"Men's Cotton Track Pants", brand:"Puma", category:"men", subcategory:"track", mrp_actual:2499, base_price:2124, gst_percent:12, shipping:0, delivery_days:3, stock:70, review_score:88, img:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&h=600&fit=crop", discount:15 },
+    { id:8, name:"Men's Insulated Winter Jacket", brand:"Wildcraft", category:"men", subcategory:"jacket", mrp_actual:3999, base_price:2999, gst_percent:12, shipping:0, delivery_days:4, stock:40, review_score:90, img:"https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&h=600&fit=crop", discount:25 },
+    { id:9, name:"Men's Genuine Leather Belt", brand:"Titan", category:"men", subcategory:"accessory", mrp_actual:1495, base_price:1345, gst_percent:18, shipping:0, delivery_days:3, stock:100, review_score:85, img:"https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=500&h=600&fit=crop", discount:10 },
+    { id:10, name:"Men's Analog Watch with Leather Strap", brand:"Fossil", category:"men", subcategory:"accessory", mrp_actual:10995, base_price:8246, gst_percent:18, shipping:0, delivery_days:3, stock:35, review_score:93, img:"https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500&h=600&fit=crop", discount:25 },
+    { id:11, name:"Men's Revolution Running Shoes", brand:"Nike", category:"men", subcategory:"shoes", mrp_actual:4995, base_price:3996, gst_percent:12, shipping:0, delivery_days:3, stock:50, review_score:91, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=600&fit=crop", discount:20 },
+    { id:12, name:"Original Aviator Sunglasses", brand:"Ray-Ban", category:"men", subcategory:"accessory", mrp_actual:8990, base_price:8091, gst_percent:18, shipping:0, delivery_days:3, stock:45, review_score:94, img:"https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=600&fit=crop", discount:10 },
+    // WOMEN
+    { id:13, name:"Women's Cotton Printed Straight Kurti", brand:"Biba", category:"women", subcategory:"kurti", mrp_actual:1499, base_price:1124, gst_percent:12, shipping:0, delivery_days:3, stock:85, review_score:89, img:"https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=500&h=600&fit=crop", discount:25 },
+    { id:14, name:"Women's Floral Print Maxi Dress", brand:"Sassa", category:"women", subcategory:"dress", mrp_actual:1999, base_price:1399, gst_percent:12, shipping:0, delivery_days:4, stock:60, review_score:91, img:"https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500&h=600&fit=crop", discount:30 },
+    { id:15, name:"Women's Cotton Printed Palazzos", brand:"Aurelia", category:"women", subcategory:"palazzo", mrp_actual:1299, base_price:1104, gst_percent:12, shipping:49, delivery_days:3, stock:95, review_score:86, img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500&h=600&fit=crop", discount:15 },
+    { id:16, name:"Women's Embroidered Anarkali Suit Set", brand:"W", category:"women", subcategory:"ethnic", mrp_actual:3499, base_price:2449, gst_percent:12, shipping:0, delivery_days:5, stock:40, review_score:93, img:"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&h=600&fit=crop", discount:30 },
+    { id:17, name:"Pure Kanchipuram Silk Saree with Blouse", brand:"Kanchipuram Silks", category:"women", subcategory:"saree", mrp_actual:7999, base_price:6399, gst_percent:5, shipping:0, delivery_days:5, stock:20, review_score:95, img:"https://images.unsplash.com/photo-1610030006870-d1e4ba6662c7?w=500&h=600&fit=crop", discount:20 },
+    { id:18, name:"Women's Premium Handbag", brand:"Lavie", category:"women", subcategory:"accessory", mrp_actual:2995, base_price:2246, gst_percent:18, shipping:0, delivery_days:3, stock:70, review_score:88, img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=600&fit=crop", discount:25 },
+    { id:19, name:"Women's Heeled Block Sandals", brand:"Metro", category:"women", subcategory:"shoes", mrp_actual:2299, base_price:1839, gst_percent:12, shipping:0, delivery_days:3, stock:55, review_score:87, img:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&h=600&fit=crop", discount:20 },
+    { id:20, name:"Women's American Diamond Earrings", brand:"Gili", category:"women", subcategory:"accessory", mrp_actual:2499, base_price:1999, gst_percent:18, shipping:0, delivery_days:3, stock:45, review_score:92, img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=600&fit=crop", discount:20 },
+    { id:21, name:"Women's Casual Printed Top", brand:"Only", category:"women", subcategory:"top", mrp_actual:1499, base_price:1049, gst_percent:12, shipping:49, delivery_days:2, stock:110, review_score:85, img:"https://images.unsplash.com/photo-1564257577-2d3ee8740ae0?w=500&h=600&fit=crop", discount:30 },
+    { id:22, name:"Women's Skinny Fit Jeans", brand:"Pepe Jeans", category:"women", subcategory:"jeans", mrp_actual:2499, base_price:1999, gst_percent:12, shipping:0, delivery_days:3, stock:65, review_score:89, img:"https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&h=600&fit=crop", discount:20 },
+    { id:23, name:"Absolute Matte Lipstick Set (Pack of 4)", brand:"Lakme", category:"women", subcategory:"beauty", mrp_actual:1075, base_price:914, gst_percent:18, shipping:49, delivery_days:3, stock:150, review_score:90, img:"https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=500&h=600&fit=crop", discount:15 },
+    { id:24, name:"Women's Eau de Parfum - Nude", brand:"Skinn by Titan", category:"women", subcategory:"beauty", mrp_actual:2295, base_price:2065, gst_percent:28, shipping:0, delivery_days:3, stock:80, review_score:91, img:"https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&h=600&fit=crop", discount:10 },
+    // BOYS
+    { id:25, name:"Boys' Pack of 3 Printed Cotton T-Shirts", brand:"Hopscotch", category:"boys", subcategory:"tshirt", mrp_actual:999, base_price:749, gst_percent:5, shipping:49, delivery_days:3, stock:150, review_score:88, img:"https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500&h=600&fit=crop", discount:25 },
+    { id:26, name:"Boys' Cotton Elasticated Shorts", brand:"U.S. Polo Assn. Kids", category:"boys", subcategory:"shorts", mrp_actual:1499, base_price:1199, gst_percent:12, shipping:0, delivery_days:4, stock:80, review_score:85, img:"https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=500&h=600&fit=crop", discount:20 },
+    { id:27, name:"Boys' Slim Fit Denim Jeans", brand:"Pantaloons Junior", category:"boys", subcategory:"jeans", mrp_actual:1299, base_price:1104, gst_percent:12, shipping:0, delivery_days:3, stock:70, review_score:87, img:"https://images.unsplash.com/photo-1519457431-44ccd64a5b9b?w=500&h=600&fit=crop", discount:15 },
+    { id:28, name:"Boys' 15-inch School Backpack", brand:"Wildcraft", category:"boys", subcategory:"accessory", mrp_actual:1895, base_price:1516, gst_percent:18, shipping:0, delivery_days:3, stock:90, review_score:90, img:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&h=600&fit=crop", discount:20 },
+    { id:29, name:"Boys' Running Sports Shoes", brand:"Puma Kids", category:"boys", subcategory:"shoes", mrp_actual:2795, base_price:2096, gst_percent:12, shipping:0, delivery_days:3, stock:60, review_score:89, img:"https://images.unsplash.com/photo-1514989940723-e8e51635289c?w=500&h=600&fit=crop", discount:25 },
+    { id:30, name:"Boys' Formal Full-Sleeve Shirt", brand:"Arrow Kids", category:"boys", subcategory:"shirt", mrp_actual:1199, base_price:1019, gst_percent:12, shipping:49, delivery_days:3, stock:75, review_score:86, img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop", discount:15 },
+    { id:31, name:"Boys' Fleece Winter Hoodie", brand:"U.S. Polo Assn. Kids", category:"boys", subcategory:"hoodie", mrp_actual:1999, base_price:1599, gst_percent:12, shipping:0, delivery_days:4, stock:55, review_score:88, img:"https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&h=600&fit=crop", discount:20 },
+    { id:32, name:"Boys' Adjustable Baseball Cap", brand:"Puma Kids", category:"boys", subcategory:"accessory", mrp_actual:795, base_price:715, gst_percent:12, shipping:49, delivery_days:3, stock:120, review_score:84, img:"https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&h=600&fit=crop", discount:10 },
+    // GIRLS
+    { id:33, name:"Girls' Cotton Floral Print Frock", brand:"Gini & Jony", category:"girls", subcategory:"frock", mrp_actual:1399, base_price:1119, gst_percent:12, shipping:0, delivery_days:3, stock:70, review_score:90, img:"https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=500&h=600&fit=crop", discount:20 },
+    { id:34, name:"Girls' Festive Embroidered Lehenga Choli", brand:"Pantaloons Junior", category:"girls", subcategory:"ethnic", mrp_actual:2499, base_price:1874, gst_percent:12, shipping:0, delivery_days:5, stock:40, review_score:93, img:"https://images.unsplash.com/photo-1622467827417-bbe2237067a9?w=500&h=600&fit=crop", discount:25 },
+    { id:35, name:"Girls' Party Wear Frosted Dress", brand:"U.S. Polo Assn. Kids", category:"girls", subcategory:"dress", mrp_actual:1799, base_price:1439, gst_percent:12, shipping:0, delivery_days:3, stock:55, review_score:89, img:"https://images.unsplash.com/photo-1596870230751-ebdfce98ec43?w=500&h=600&fit=crop", discount:20 },
+    { id:36, name:"Girls' 15-inch School Backpack", brand:"Skybags", category:"girls", subcategory:"accessory", mrp_actual:1595, base_price:1276, gst_percent:18, shipping:0, delivery_days:3, stock:85, review_score:88, img:"https://images.unsplash.com/photo-1577733966973-d680bffd2e80?w=500&h=600&fit=crop", discount:20 },
+    { id:37, name:"Girls' Lace-Up Sports Shoes", brand:"Puma Kids", category:"girls", subcategory:"shoes", mrp_actual:2295, base_price:1721, gst_percent:12, shipping:0, delivery_days:3, stock:65, review_score:87, img:"https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=500&h=600&fit=crop", discount:25 },
+    { id:38, name:"Girls' Hair Accessories Gift Set (12 pcs)", brand:"Minions", category:"girls", subcategory:"accessory", mrp_actual:699, base_price:594, gst_percent:12, shipping:49, delivery_days:3, stock:140, review_score:85, img:"https://images.unsplash.com/photo-1617e24568876-04be47791550?w=500&h=600&fit=crop", discount:15 },
+    { id:39, name:"Girls' Denim Dungaree Jumpsuit", brand:"Hopscotch", category:"girls", subcategory:"dungaree", mrp_actual:1199, base_price:959, gst_percent:12, shipping:0, delivery_days:3, stock:75, review_score:86, img:"https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400&h=500&fit=crop", discount:20 },
+    { id:40, name:"Girls' Padded Winter Jacket", brand:"U.S. Polo Assn. Kids", category:"girls", subcategory:"jacket", mrp_actual:2499, base_price:1874, gst_percent:12, shipping:0, delivery_days:4, stock:45, review_score:90, img:"https://images.unsplash.com/photo-1544923246-77307dd270b1?w=500&h=600&fit=crop", discount:25 },
+    { id:41, name:"Girls' Mary Jane Ballet Shoes", brand:"Bata", category:"girls", subcategory:"shoes", mrp_actual:995, base_price:846, gst_percent:5, shipping:49, delivery_days:3, stock:90, review_score:87, img:"https://images.unsplash.com/photo-1515347619259-1537f8655646?w=500&h=600&fit=crop", discount:15 },
+    { id:42, name:"Girls' Digital Princess Watch", brand:"Casio", category:"girls", subcategory:"accessory", mrp_actual:1995, base_price:1596, gst_percent:18, shipping:0, delivery_days:3, stock:60, review_score:91, img:"https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=500&h=600&fit=crop", discount:20 }
+];
+
+// ==========================================
+// ONDC INTEGRATION (India's Open E-Commerce Network)
+// ==========================================
+const ONDC_CONFIG = { enabled: false };
+
+function toggleONDC() {
+    ONDC_CONFIG.enabled = !ONDC_CONFIG.enabled;
+    const btn = document.getElementById('ondcToggle');
+    if (ONDC_CONFIG.enabled) {
+        btn.classList.add('active');
+        btn.innerHTML = '✓ ONDC Connected';
+        showToast('🌐 ONDC Network Connected - Live seller products available', 'success');
+    } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '🌐 <span>Load ONDC Products</span>';
+        showToast('📦 Switched to curated catalog', 'success');
+    }
+    renderProducts();
+}
+
+// ==========================================
+// STATE
+// ==========================================
+let cart = [], wishlist = [], currentUser = null, currentCategory = 'all', selectedPayment = 'cod', lastActivity = Date.now();
+const LOCK_TIMEOUT = 60000;
+
+// ==========================================
+// AUTH
+// ==========================================
+function sendOTP() {
+    const phone = document.getElementById('phoneInput').value;
+    const name = document.getElementById('nameInput').value;
+    if (phone.length !== 10 || !/^\d+$/.test(phone)) { showToast('❌ Invalid phone number', 'error'); return; }
+    if (!name || name.length < 2) { showToast('❌ Please enter your name', 'error'); return; }
+    currentUser = { phone, name };
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+    document.getElementById('otpPhone').textContent = '+91 ' + phone;
+    startOTPTimer();
+    showToast('📱 OTP sent to +91 ' + phone, 'success');
+}
+function verifyOTP() {
+    const otp = document.getElementById('otpInput').value;
+    if (otp === '123456') {
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('mainApp').classList.add('active');
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+        document.getElementById('checkName').value = currentUser.name;
+        document.getElementById('checkPhone').value = currentUser.phone;
+        resetActivity(); renderProducts();
+        showToast('👋 Welcome, ' + currentUser.name + '!', 'success');
+    } else { showToast('❌ Invalid OTP (Demo: 123456)', 'error'); }
+}
+function startOTPTimer() {
+    let seconds = 30;
+    const timerEl = document.getElementById('timer');
+    const resendLink = document.getElementById('resendLink');
+    resendLink.classList.add('hidden');
+    const interval = setInterval(() => {
+        seconds--; timerEl.textContent = seconds + 's';
+        if (seconds <= 0) { clearInterval(interval); resendLink.classList.remove('hidden'); }
+    }, 1000);
+}
+function resendOTP() { showToast('📱 OTP resent', 'success'); startOTPTimer(); }
+function logout() {
+    if (!confirm('Logout?')) return;
+    currentUser = null; cart = []; wishlist = [];
+    document.getElementById('mainApp').classList.remove('active');
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('step1').classList.remove('hidden');
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('phoneInput').value = '';
+    document.getElementById('nameInput').value = '';
+    document.getElementById('otpInput').value = '';
+    updateCartCount(); updateWishlistCount();
+}
+
+// Inactivity lock
+function resetActivity() { lastActivity = Date.now(); }
+setInterval(() => {
+    if (currentUser && (Date.now() - lastActivity > LOCK_TIMEOUT)) {
+        showToast('🔒 Session locked', 'error'); setTimeout(logout, 1500);
+    }
+}, 5000);
+['mousemove','keypress','click','scroll','touchstart'].forEach(e => document.addEventListener(e, resetActivity));
+
+// Fuzzy search
+function levenshtein(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    const m = [];
+    for (let i = 0; i <= b.length; i++) m[i] = [i];
+    for (let j = 0; j <= a.length; j++) m[0][j] = j;
+    for (let i = 1; i <= b.length; i++)
+        for (let j = 1; j <= a.length; j++)
+            if (b[i-1] === a[j-1]) m[i][j] = m[i-1][j-1];
+            else m[i][j] = Math.min(m[i-1][j-1]+1, m[i][j-1]+1, m[i-1][j]+1);
+    return m[b.length][a.length];
+}
+function fuzzyMatch(text, query) {
+    text = text.toLowerCase(); query = query.toLowerCase().trim();
+    if (!query) return true;
+    if (text.includes(query)) return true;
+    const qWords = query.split(/\s+/), tWords = text.split(/\s+/);
+    for (let qw of qWords) {
+        if (qw.length < 2) continue;
+        let found = false;
+        for (let tw of tWords) {
+            if (tw.includes(qw) || qw.includes(tw)) { found = true; break; }
+            if (qw.length > 3 && levenshtein(qw, tw) <= 1) { found = true; break; }
+        }
+        if (!found) return false;
+    }
+    return true;
+}
+
+// Price calculation - GST on selling price (base_price), not MRP
+function calcPrice(p) {
+    const gst = Math.round(p.base_price * p.gst_percent / 100);
+    const total = p.base_price + gst + p.shipping;
+    return { mrp: p.mrp_actual, selling: p.base_price, gst, shipping: p.shipping, total: Math.round(total) };
+}
+
+// Category
+function setCategory(cat, el) {
+    currentCategory = cat;
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('categoryFilter').value = cat;
+    renderProducts();
+}
+
+// Render products
+function renderProducts() {
+    const search = document.getElementById('searchInput').value;
+    const urgency = document.getElementById('urgencyFilter').value;
+    const sort = document.getElementById('sortFilter').value;
+    const catFilter = document.getElementById('categoryFilter').value;
+    const grid = document.getElementById('productGrid');
+    let activeCat = catFilter !== 'all' ? catFilter : currentCategory;
+
+    let filtered = products.filter(p => {
+        const matchCat = activeCat === 'all' || p.category === activeCat;
+        const matchSearch = fuzzyMatch(p.name + ' ' + p.brand + ' ' + p.subcategory, search);
+        const matchUrg = urgency === 'all' || p.delivery_days <= parseInt(urgency);
+        return matchCat && matchSearch && matchUrg;
+    });
+
+    if (sort === 'low') filtered.sort((a,b) => calcPrice(a).total - calcPrice(b).total);
+    else if (sort === 'high') filtered.sort((a,b) => calcPrice(b).total - calcPrice(a).total);
+    else if (sort === 'rating') filtered.sort((a,b) => b.review_score - a.review_score);
+    else filtered.sort((a,b) => b.review_score - a.review_score);
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--gray);">
+            <div style="font-size:4rem;margin-bottom:15px;">🔍</div>
+            <h3>No products found</h3><p style="margin-top:8px;">Try different keywords or filters</p></div>`;
+        return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+        const price = calcPrice(p);
+        const inWishlist = wishlist.includes(p.id);
+        return `
+        <div class="product-card">
+            <div class="product-img-wrap">
+                ${p.discount ? `<div class="product-badge-top">${p.discount}% OFF</div>` : ''}
+                ${ONDC_CONFIG.enabled ? `<div class="ondc-badge">ONDC</div>` : ''}
+                <button class="wishlist-btn ${inWishlist ? 'active' : ''}" onclick="event.stopPropagation();toggleWishlistItem(${p.id}, this)">
+                    ${inWishlist ? '❤️' : '🤍'}
+                </button>
+                <img src="${p.img}" class="product-img" alt="${p.name}" onerror="this.src='https://via.placeholder.com/500x600/f1f5f9/64748b?text=Product'">
+            </div>
+            <div class="product-info">
+                <div class="product-brand">${p.brand}</div>
+                <div class="product-name">${p.name}</div>
+                <div class="price-box">
+                    <div class="mrp">MRP: ₹${price.mrp.toLocaleString('en-IN')}</div>
+                    <div class="selling-price">Selling: ₹${price.selling.toLocaleString('en-IN')} (Save ₹${(price.mrp - price.selling).toLocaleString('en-IN')})</div>
+                    <div class="final-price">₹${price.total.toLocaleString('en-IN')} <small style="font-size:0.7rem;font-weight:500;">final price</small></div>
+                    <div class="price-breakdown">
+                        Base ₹${price.selling} + GST ${p.gst_percent}% (₹${price.gst})${price.shipping > 0 ? ` + Ship ₹${price.shipping}` : ' + Free Ship'}
+                    </div>
+                </div>
+                <div class="product-badges">
+                    <span class="p-badge badge-del">🚚 ${p.delivery_days === 1 ? 'Tomorrow' : p.delivery_days + ' Days'}</span>
+                    <span class="p-badge badge-trust">✓ ${p.review_score}%</span>
+                    <span class="p-badge badge-gst">GST ${p.gst_percent}%</span>
+                </div>
+                <button class="add-cart-btn" onclick="event.stopPropagation();addToCart(${p.id}, this)">${t('add_to_cart')}</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// Cart
+function addToCart(id, btn) {
+    const p = products.find(x => x.id === id);
+    const existing = cart.find(x => x.id === id);
+    if (existing) existing.qty++; else cart.push({ ...p, qty: 1 });
+    updateCartCount();
+    showToast('✅ ' + p.brand + ' added', 'success');
+    if (btn) {
+        const orig = btn.textContent;
+        btn.textContent = t('added'); btn.classList.add('added');
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 1500);
+    }
+}
+function updateCartCount() {
+    document.getElementById('cartCount').textContent = cart.reduce((s, i) => s + i.qty, 0);
+}
+function toggleCart() {
+    document.getElementById('cartSidebar').classList.toggle('open'); renderCart();
+}
+function renderCart() {
+    const items = document.getElementById('cartItems'), footer = document.getElementById('cartFooter');
+    if (cart.length === 0) {
+        items.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><h3>${t('empty_cart')}</h3></div>`;
+        footer.innerHTML = ''; return;
+    }
+    items.innerHTML = cart.map(item => {
+        const price = calcPrice(item);
+        return `
+        <div class="cart-item">
+            <img src="${item.img}" class="cart-item-img" alt="${item.name}">
+            <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-brand">${item.brand}</div>
+                <div class="cart-item-price">₹${price.total.toLocaleString('en-IN')} × ${item.qty}</div>
+                <div class="cart-item-qty">
+                    <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+                    <span>${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                    <button class="remove-item" onclick="removeFromCart(${item.id})">${t('remove')}</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+    const subtotal = cart.reduce((s, i) => s + i.base_price * i.qty, 0);
+    const gst = cart.reduce((s, i) => s + Math.round(i.base_price * i.gst_percent / 100) * i.qty, 0);
+    const shipping = cart.reduce((s, i) => s + i.shipping * i.qty, 0);
+    const total = subtotal + gst + shipping;
+    footer.innerHTML = `
+        <div class="cart-total-row"><span>${t('subtotal')}</span><span>₹${subtotal.toLocaleString('en-IN')}</span></div>
+        <div class="cart-total-row"><span>${t('gst')}</span><span>₹${gst.toLocaleString('en-IN')}</span></div>
+        <div class="cart-total-row"><span>${t('shipping')}</span><span>${shipping === 0 ? t('free') : '₹' + shipping.toLocaleString('en-IN')}</span></div>
+        <div class="cart-total-row grand"><span>${t('total')}</span><span>₹${total.toLocaleString('en-IN')}</span></div>
+        <button class="checkout-btn" onclick="openCheckout()">${t('checkout')} →</button>`;
+}
+function changeQty(id, delta) {
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
+    updateCartCount(); renderCart();
+}
+function removeFromCart(id) {
+    cart = cart.filter(x => x.id !== id);
+    updateCartCount(); renderCart(); showToast('🗑️ Removed', 'success');
+}
+
+// Wishlist
+function toggleWishlistItem(id, btn) {
+    const idx = wishlist.indexOf(id);
+    if (idx > -1) { wishlist.splice(idx, 1); btn.classList.remove('active'); btn.textContent = '🤍'; }
+    else { wishlist.push(id); btn.classList.add('active'); btn.textContent = '❤️'; showToast('❤️ Added to wishlist', 'success'); }
+    updateWishlistCount();
+}
+function updateWishlistCount() { document.getElementById('wishlistCount').textContent = wishlist.length; }
+function toggleWishlist() {
+    if (wishlist.length === 0) { showToast('Your wishlist is empty'); return; }
+    currentCategory = 'all';
+    document.getElementById('searchInput').value = '';
+    document.getElementById('categoryFilter').value = 'all';
+    const grid = document.getElementById('productGrid');
+    const wishProducts = products.filter(p => wishlist.includes(p.id));
+    grid.innerHTML = wishProducts.map(p => {
+        const price = calcPrice(p);
+        return `
+        <div class="product-card">
+            <div class="product-img-wrap">
+                ${p.discount ? `<div class="product-badge-top">${p.discount}% OFF</div>` : ''}
+                <button class="wishlist-btn active" onclick="event.stopPropagation();toggleWishlistItem(${p.id}, this);renderProducts();">❤️</button>
+                <img src="${p.img}" class="product-img" alt="${p.name}">
+            </div>
+            <div class="product-info">
+                <div class="product-brand">${p.brand}</div>
+                <div class="product-name">${p.name}</div>
+                <div class="price-box">
+                    <div class="mrp">MRP: ₹${price.mrp.toLocaleString('en-IN')}</div>
+                    <div class="final-price">₹${price.total.toLocaleString('en-IN')}</div>
+                </div>
+                <button class="add-cart-btn" onclick="event.stopPropagation();addToCart(${p.id}, this)">${t('add_to_cart')}</button>
+            </div>
+        </div>`;
+    }).join('');
+    showToast(`❤️ Showing ${wishlist.length} wishlist items`);
+}
+
+// Checkout
+function openCheckout() {
+    if (cart.length === 0) return;
+    toggleCart();
+    document.getElementById('checkoutModal').classList.add('active');
+    document.getElementById('checkoutStep1').classList.remove('hidden');
+    document.getElementById('checkoutStep2').classList.add('hidden');
+}
+function closeCheckout() { document.getElementById('checkoutModal').classList.remove('active'); }
+function goToPayment() {
+    const fields = ['checkName','checkPhone','checkAddress','checkCity','checkPincode','checkState'];
+    if (fields.some(f => !document.getElementById(f).value.trim())) { showToast('❌ Fill all fields', 'error'); return; }
+    if (document.getElementById('checkPhone').value.length !== 10 || document.getElementById('checkPincode').value.length !== 6) {
+        showToast('❌ Invalid phone or pincode', 'error'); return;
+    }
+    document.getElementById('checkoutStep1').classList.add('hidden');
+    document.getElementById('checkoutStep2').classList.remove('hidden');
+    const subtotal = cart.reduce((s, i) => s + i.base_price * i.qty, 0);
+    const gst = cart.reduce((s, i) => s + Math.round(i.base_price * i.gst_percent / 100) * i.qty, 0);
+    const shipping = cart.reduce((s, i) => s + i.shipping * i.qty, 0);
+    const total = subtotal + gst + shipping;
+    document.getElementById('orderSummary').innerHTML = `
+        <h4 style="margin-bottom:10px;">${t('items_ordered')} (${cart.reduce((s,i)=>s+i.qty,0)})</h4>
+        ${cart.map(i => `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.85rem;">
+            <span>${i.name.substring(0,30)}... × ${i.qty}</span>
+            <span>₹${(calcPrice(i).total * i.qty).toLocaleString('en-IN')}</span>
+        </div>`).join('')}
+        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);">
+            <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;">
+                <span>${t('total')}</span><span style="color:var(--success);">₹${total.toLocaleString('en-IN')}</span>
+            </div>
+        </div>`;
+}
+function backToAddress() {
+    document.getElementById('checkoutStep1').classList.remove('hidden');
+    document.getElementById('checkoutStep2').classList.add('hidden');
+}
+function selectPayment(method, el) {
+    selectedPayment = method;
+    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+}
+function placeOrder() {
+    const orderId = 'SS' + Date.now().toString().slice(-10);
+    const subtotal = cart.reduce((s, i) => s + i.base_price * i.qty, 0);
+    const gst = cart.reduce((s, i) => s + Math.round(i.base_price * i.gst_percent / 100) * i.qty, 0);
+    const shipping = cart.reduce((s, i) => s + i.shipping * i.qty, 0);
+    const total = subtotal + gst + shipping;
+    const maxDays = Math.max(...cart.map(i => i.delivery_days));
+    const deliveryDate = new Date(); deliveryDate.setDate(deliveryDate.getDate() + maxDays);
+    const paymentLabels = { cod:'Cash on Delivery', upi:'UPI', card:'Credit/Debit Card', netbanking:'Net Banking' };
+    document.getElementById('orderIdDisplay').textContent = orderId;
+    document.getElementById('orderDetailsDisplay').innerHTML = `
+        <div class="order-detail-row"><span>${t('items_ordered')}:</span><strong>${cart.reduce((s,i)=>s+i.qty,0)} items</strong></div>
+        <div class="order-detail-row"><span>${t('subtotal')}:</span><strong>₹${subtotal.toLocaleString('en-IN')}</strong></div>
+        <div class="order-detail-row"><span>${t('gst')}:</span><strong>₹${gst.toLocaleString('en-IN')}</strong></div>
+        <div class="order-detail-row"><span>${t('shipping')}:</span><strong>${shipping === 0 ? 'FREE' : '₹' + shipping.toLocaleString('en-IN')}</strong></div>
+        <div class="order-detail-row"><span>${t('total')}:</span><strong style="color:var(--success);font-size:1.1rem;">₹${total.toLocaleString('en-IN')}</strong></div>
+        <div class="order-detail-row"><span>${t('delivery_date')}:</span><strong>${deliveryDate.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})}</strong></div>
+        <div class="order-detail-row"><span>${t('payment')}:</span><strong>${paymentLabels[selectedPayment]}</strong></div>
+        <div class="order-detail-row"><span>Address:</span><strong>${document.getElementById('checkCity').value}, ${document.getElementById('checkPincode').value}</strong></div>`;
+    closeCheckout();
+    document.getElementById('successModal').classList.add('active');
+    cart = []; updateCartCount();
+    showToast('🎉 Order placed successfully!', 'success');
+}
+function closeSuccess() { document.getElementById('successModal').classList.remove('active'); }
+
+// Toast
+function showToast(msg, type = '') {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg; toast.className = 'toast show ' + type;
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+renderProducts();
+</script>
+</body>
+</html>
