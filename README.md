@@ -45,3 +45,6 @@ ShopSmart is a highly scalable, decoupled online store architecture designed to 
    ```bash
    git clone https://github.com/YOUR_USERNAME/ShopSmart.git
    cd ShopSmart
+
+   https://1drv.ms/f/c/666e91df76557ea6/IgCdL4NDswgmRqREwog69hmnAbpCXxNVwwusvQVXwiAwkbA?e=IK2Dok
+   
